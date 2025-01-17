@@ -7,14 +7,11 @@ sys.path.append("./")
 import numpy as np
 import torch
 from torch import nn
-try:
-    from src.blocks.PositionalEncoding import PositionalEncoding
-    from src.blocks.Transformer_Block import Transformer_Block
-    from src.blocks.patchify import patchify, unpatchify
-    from src.blocks.Norm import Norm
-    from src.blocks.ImagePositionalEncoding import PatchEmbed, PatchEmbedAttn
-except ModuleNotFoundError:
-    from ..blocks.PositionalEncoding import PositionalEncoding
+from src.blocks.PositionalEncoding import PositionalEncoding
+from src.blocks.Transformer_Block import Transformer_Block
+from src.blocks.patchify import patchify, unpatchify
+from src.blocks.Norm import Norm
+from src.blocks.ImagePositionalEncoding import PatchEmbed, PatchEmbedAttn
 import os
 import json
 from tqdm import tqdm
