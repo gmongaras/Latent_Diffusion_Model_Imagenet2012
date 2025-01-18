@@ -12,7 +12,7 @@
             "justMyCode": false,
 
 
-            // "program": "/users/gmongaras/miniconda3/bin/torchrun",
+            // "program": "torchrun",
             // "args": [ 
             //     "--nproc_per_node=8",
             //     // "--master-port", "29507",
@@ -23,7 +23,7 @@
             //         "CUDA_VISIBLE_DEVICES": "0,1,2,3,4,5,6,7",
             //     },
 
-            "program": "/users/gmongaras/gmongaras_diffusion_models/Cottention_Diffusion_Transformer/src/infer.py",
+            "program": "src/infer.py",
             "args": [
                     "--loadDir", "models/softmax",
                 "--loadDefFile", "model_params_250000s.json",

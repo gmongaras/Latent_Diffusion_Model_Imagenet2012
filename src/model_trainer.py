@@ -292,7 +292,7 @@ class model_trainer():
         # Initialize wandb run
         if is_main_process():
             wandb.init(
-                project="Cottention_Diffusion",
+                project="Imagenet2012_Diffusion_Model",
                 name=self.wandb_name,
                 notes=None, # May add notes later
                 
