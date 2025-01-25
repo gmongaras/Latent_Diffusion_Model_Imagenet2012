@@ -35,12 +35,12 @@ def train():
     saveDir = "models/test"
 
     loadModel = True
-    loadDir = "models/test"
+    loadDir = "models/softmax"
     loadFile = "model_250000s.pkl"
     loadDefFile = "model_params_250000s.json"
-    optimFile = "optim_250000s.pkl"
-    schedulerFile = "scheduler_250000s.pkl"
-    scalerFile = "scaler_250000s.pkl"
+    optimFile = None#"optim_250000s.pkl"
+    schedulerFile = None#"scheduler_250000s.pkl"
+    scalerFile = None#"scaler_250000s.pkl"
     
     
     

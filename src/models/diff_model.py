@@ -11,7 +11,7 @@ from src.blocks.PositionalEncoding import PositionalEncoding
 from src.blocks.Transformer_Block import Transformer_Block
 from src.blocks.patchify import patchify, unpatchify
 from src.blocks.Norm import Norm
-from src.blocks.ImagePositionalEncoding import PatchEmbed, PatchEmbedAttn
+from src.blocks.ImagePositionalEncoding import PatchEmbed
 import os
 import json
 from tqdm import tqdm
