@@ -34,6 +34,7 @@ def train():
     numSaveSteps = 10_000
     saveDir = "models/test"
 
+    # Files of checkpointed filed. True to load in a checkpoint. False to start from scratch
     loadModel = True
     loadDir = "models/softmax"
     loadFile = "model_250000s.pkl"
