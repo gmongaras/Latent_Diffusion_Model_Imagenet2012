@@ -7,7 +7,7 @@ This repo was created for a few reasons:
 2. While there are a lot of diffusion model finetuning scripts, there are few training scripts that work on datasets larger than MNIST/CIFAR10.
 3. I am going to go through this repo step-by-step in a video to explain concepts in a class-conditioned flow-based diffusion model. Video can be found [here](https://www.youtube.com/live/zgb0g1qM6pE?si=0uED2JpZ1m8KK-SV)
 
-
+![ezgif-1-a7835e5b54](https://github.com/user-attachments/assets/c7daa233-440d-4fdf-9803-924ac7bb2fff)
 
 # Setup
 
