@@ -66,7 +66,9 @@ class Attention(nn.Module):
         #     mask = torch.tril(torch.ones(N, self.num_heads, C, C, requires_grad=False)).bool().to(x.device)
                 
         # # Flash attention
-        # attn_ = flash_attn_func(queries.to(torch.float16), keys.to(torch.float16), values.to(torch.float16), causal=self.causal, softmax_scale=self.scale).to(queries.dtype)
+        #### NOTE: For some reason flash attenetion expects (batch, seqlen, num heads, dim) instead of what you usually see (batch, num heads, seqlen, dim)
+        ####       Transposing before and after works for me.
+        # attn_ = flash_attn_func(queries.transpose(1, 2).to(torch.float16), keys.transpose(1, 2).to(torch.float16), values.transpose(1, 2).to(torch.float16), causal=self.causal, softmax_scale=self.scale).transpose(1, 2).to(queries.dtype)
 
         # # Manual
         # attn = (queries @ keys.mT) * self.scale        
