@@ -31,7 +31,7 @@ class Attention(nn.Module):
             self.q_norm = nn.RMSNorm(dim, dim)
             self.k_norm = nn.RMSNorm(dim, dim)
         else:
-            # I messed this up here
+            # Norm should be on heads
             self.q_norm = nn.RMSNorm(self.head_dim)
             self.k_norm = nn.RMSNorm(self.head_dim)
 
