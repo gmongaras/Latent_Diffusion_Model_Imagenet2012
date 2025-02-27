@@ -6,11 +6,12 @@ from src.blocks.rotary_embedding import RotaryEmbedding
 
 
 class Attention(nn.Module):
-    def __init__(self, dim, num_heads = 8, causal=False, emb_dim=None, positional_encoding="absolute", layer_idx=None):
+    def __init__(self, dim, num_heads = 8, causal=False, emb_dim=None, positional_encoding="absolute", layer_idx=None, legacy_norm=False):
         super().__init__()
 
         self.layer_idx = layer_idx
         self.positional_encoding = positional_encoding
+        self.legacy_norm = legacy_norm
         
         # Projections
         self.query_proj = nn.Linear(dim, dim if emb_dim == None else emb_dim, bias = False)
@@ -25,9 +26,14 @@ class Attention(nn.Module):
         self.scale = self.head_dim ** -0.5
 
         # Softmax attention also needs q k norms
-        self.q_norm = nn.RMSNorm(dim, dim)
-        self.k_norm = nn.RMSNorm(dim, dim)
-
+        if legacy_norm:
+            # I messed this up here
+            self.q_norm = nn.RMSNorm(dim, dim)
+            self.k_norm = nn.RMSNorm(dim, dim)
+        else:
+            # I messed this up here
+            self.q_norm = nn.RMSNorm(self.head_dim)
+            self.k_norm = nn.RMSNorm(self.head_dim)
 
         self.causal = causal
 
@@ -46,8 +52,12 @@ class Attention(nn.Module):
 
 
         # RMSNorm and Project the queries, keys, and values (N, C, d) --> (N, H, C, d//H)
-        queries = self.q_norm(self.query_proj(x)).reshape(N, C, self.num_heads, self.head_dim).permute(0, 2, 1, 3)
-        keys = self.k_norm(self.key_proj(x)).reshape(N, C, self.num_heads, self.head_dim).permute(0, 2, 1, 3)
+        if self.legacy_norm:
+            queries = self.q_norm(self.query_proj(x)).reshape(N, C, self.num_heads, self.head_dim).permute(0, 2, 1, 3)
+            keys = self.k_norm(self.key_proj(x)).reshape(N, C, self.num_heads, self.head_dim).permute(0, 2, 1, 3)
+        else:
+            queries = self.q_norm(self.query_proj(x).reshape(N, C, self.num_heads, self.head_dim).permute(0, 2, 1, 3))
+            keys = self.k_norm(self.key_proj(x).reshape(N, C, self.num_heads, self.head_dim).permute(0, 2, 1, 3))
         values = self.value_proj(x).reshape(N, C, self.num_heads, self.head_dim).permute(0, 2, 1, 3)
 
 

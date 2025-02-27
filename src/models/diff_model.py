@@ -37,7 +37,7 @@ class diff_model(nn.Module):
     # device - Device to put the model on (gpu or cpu)
     # start_step - Step to start on. Doesn't do much besides 
     #               change the name of the saved output file
-    def __init__(self, inCh, num_classes, patch_size, dim, c_dim, hidden_scale, num_heads, num_blocks, positional_encoding, device, start_step=0, wandb_id=None):
+    def __init__(self, inCh, num_classes, patch_size, dim, c_dim, hidden_scale, num_heads, num_blocks, positional_encoding, device, start_step=0, wandb_id=None, legacy_norm=False):
         super(diff_model, self).__init__()
         
         self.inCh = inCh
@@ -45,6 +45,9 @@ class diff_model(nn.Module):
         self.patch_size = patch_size
         self.start_step = start_step
         self.wandb_id = wandb_id
+
+        # I messed up the norm when pretraining
+        self.legacy_norm = legacy_norm
         
         # Important default parameters
         self.defaults = {
@@ -60,6 +63,7 @@ class diff_model(nn.Module):
             "device": "cpu",
             "start_step": start_step,
             "wandb_id": wandb_id,
+            "legacy_norm": self.legacy_norm
         }
         
         # Convert the device to a torch device
@@ -87,7 +91,7 @@ class diff_model(nn.Module):
         
         # Transformer blocks
         self.blocks = nn.ModuleList([
-            Transformer_Block(dim, c_dim=dim, hidden_scale=hidden_scale, num_heads=num_heads, positional_encoding=positional_encoding, layer_idx=i).to(device)
+            Transformer_Block(dim, c_dim=dim, hidden_scale=hidden_scale, num_heads=num_heads, positional_encoding=positional_encoding, layer_idx=i, legacy_norm=self.legacy_norm).to(device)
             for i in range(num_blocks)
         ])
             

@@ -12,13 +12,13 @@ from xformers.ops.swiglu_op import SwiGLU
 
 
 class Transformer_Block(nn.Module):
-    def __init__(self, dim, c_dim, hidden_scale=4.0, num_heads = 8, causal=False, positional_encoding="absolute", layer_idx=None):
+    def __init__(self, dim, c_dim, hidden_scale=4.0, num_heads = 8, causal=False, positional_encoding="absolute", layer_idx=None, legacy_norm=False):
         super().__init__()
         
         # MLP and attention blocks
         self.MLP = MLP(dim, hidden_scale)
         # self.MLP = SwiGLU(dim, int(dim*hidden_scale), dim)
-        self.attn = Attention(dim, num_heads=num_heads, causal=causal, positional_encoding=positional_encoding, layer_idx=layer_idx)
+        self.attn = Attention(dim, num_heads=num_heads, causal=causal, positional_encoding=positional_encoding, layer_idx=layer_idx, legacy_norm=legacy_norm)
         
         # Two layer norms
         self.norm1 = Norm(dim, c_dim)
