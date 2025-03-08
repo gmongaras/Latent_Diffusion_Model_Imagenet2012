@@ -172,7 +172,7 @@ class model_trainer():
 
 
         # EMA model on CPU to save GPU memory
-        self.ema_model_cpu = copy.deepcopy(self.model.module.cpu())
+        self.ema_model_cpu = copy.deepcopy(self.model.module).cpu()
         self.ema_model_cpu.eval()
         
         # Optimizer
