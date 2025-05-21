@@ -3,7 +3,7 @@
 This repo is a flow-based diffusion model training script on the Imagenet 2012 dataset. This dataset has 1000 classes and this model is trained as a single-stream class conditioned model as opposed to a dual stream text conditioned model. This way the model is quite small and easily runnable on consumer hardware.
 
 This repo was created for a few reasons:
-1. To easily run experiments with diffusion models on a reasonable, but small-scale dataset for "fast" experimentation. While current diffusion models use millions ro billions of images, this repo only uses the small (funny that this is now a small dataset lol) Imagenet 2012 dataset. Training can be done relatively cheap.
+1. To easily run experiments with diffusion models on a reasonable, but small-scale dataset for "fast" experimentation. While current diffusion models use millions or billions of images, this repo only uses the small (funny that this is now a small dataset lol) Imagenet 2012 dataset. Training can be done relatively cheap.
 2. While there are a lot of diffusion model finetuning scripts, there are few training scripts that work on datasets larger than MNIST/CIFAR10.
 3. I am going to go through this repo step-by-step in a video to explain concepts in a class-conditioned flow-based diffusion model. Video can be found [here](https://www.youtube.com/live/zgb0g1qM6pE?si=0uED2JpZ1m8KK-SV)
 
@@ -15,19 +15,19 @@ First, download the repo with `git clone https://github.com/gmongaras/Latent_Dif
 
 Then, create an venv. For example, you can do so with the following:
 ```
-python3 -m venv "imgnet_diff_venv"
+python3 -m venv "imgenet_diff_venv"
 ```
 
-Note that I am using python 3.10. Other versions of python likely work. I am guessing the rage [3.8, 3.11] works. Outside this range, I am a little skepticle.
+Note that I am using python 3.10. Other versions of python likely work. I am guessing the range [3.8, 3.11] works. Outside this range, I am a little skepticle.
 
 Activate the venv based on your system:
 ```{Linux}
 Linux:
-source imgnet_diff_venv/bin/activate
+source imgenet_diff_venv/bin/activate
 ```
 ```{Windows}
 Windows:
-imgnet_diff_venv\Scripts\activate
+imgenet_diff_venv\Scripts\activate
 ```
 
 Install the python package versions I used with `python -m pip install -r requirements.txt`
@@ -96,15 +96,18 @@ The following params are available to change:
 
 # Training
 
-Training a model should be quite easy. The most annoying part is getting the dataset.
+Training a model should be quite easy. The most annoying part is getting the dataset, which should be a lot easier if my huggingface repo is still up.
 
 ## Data
 
-The dataset is the ImageNet 2012 dataset as it's a native loader in PyTorch (https://pytorch.org/vision/main/generated/torchvision.datasets.ImageNet.html). The dataset should be downloaded from the ImageNet website and put in the `data/` folder. Download the [2012/Development kit (Task 1 & 2)](https://www.image-net.org/data/ILSVRC/2012/ILSVRC2012_devkit_t12.tar.gz) and the [2012/Training images (Task 1 & 2)](https://www.image-net.org/data/ILSVRC/2012/ILSVRC2012_img_train.tar), giving `ILSVRC2012_devkit_t12.tar.gz` and `ILSVRC2012_img_train.tar`. Running the train script should start extracting the data automatically via the dataloader.
+Instead of downloading the dataset from the website, I have changed the repo such that you can quickly download it from huggingface:
 
-This dataset is approximately 300GB.
+```
+git lfs install
+git clone https://huggingface.co/datasets/gmongaras/ImageNet12
+``` 
 
-I also have the entire dataset [on huggingface](https://huggingface.co/datasets/gmongaras/ImageNet12) (may be illegal :/) but I don't think it's compatable with the dataloader. You can always change it to a huggingface dataset instead. It's quite easy to get those working rather than having to wait to be accepted for ImageNet access.
+This dataset is approximately 300GB and is a direct clone from the ImageNet website.
 
 ## Train script
 

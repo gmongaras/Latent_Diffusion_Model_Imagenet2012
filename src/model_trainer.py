@@ -7,6 +7,9 @@ import os
 import wandb
 from tqdm import tqdm
 import copy
+import datasets
+from PIL import Image
+import io
 
 import torch.multiprocessing as mp
 from torch.utils.data.distributed import DistributedSampler
@@ -250,14 +253,15 @@ class model_trainer():
             # Data already in range [0, 1]. Make between -1 and 1
             torchvision.transforms.Lambda(lambda x: 2*x - 1.0)
         ])
-        # dataset_ = torchvision.datasets.Imagenette
-        # pth = "./data"
-        dataset_ = torchvision.datasets.ImageNet
-        pth = "./data/ImageNet12"
-        try:
-            dataset = dataset_(pth, split="train", transform=transforms)
-        except:
-            dataset = dataset_(pth, split="train", transform=transforms, download=True)
+        def transform_img(img):
+            img = Image.open(io.BytesIO(img))
+            img_ = transforms(img)
+            img.close()
+            return img_
+        def collate_fn(batch):
+            return torch.stack([transform_img(b["image"]) for b in batch]), \
+                torch.tensor([b["label"] for b in batch], dtype=torch.float64)
+        dataset = datasets.load_dataset("parquet", data_dir="ImageNet12", cache_dir="./cache", split="train", num_proc=64)
         if self.dev == "cpu":
             data_loader = DataLoader(dataset, batch_size=self.batchSize,
                 pin_memory=True,
@@ -267,6 +271,7 @@ class model_trainer():
                 num_workers=10,
                 prefetch_factor=10,
                 persistent_workers=True,
+                collate_fn=collate_fn,
             )
         else:
             data_loader = DataLoader(dataset, batch_size=self.batchSize,
@@ -278,6 +283,7 @@ class model_trainer():
                 num_workers=10,
                 prefetch_factor=10,
                 persistent_workers=True,
+                collate_fn=collate_fn,
             )
 
         # Losses over steps

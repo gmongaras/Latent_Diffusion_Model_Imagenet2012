@@ -7,8 +7,6 @@ nproc_per_node=8
 # Path to torchrun
 torchrunpath=REPLACE_WITH_PATH_TO_TORCHRUN
 
-
-
 nodes=( $( scontrol show hostnames $SLURM_JOB_NODELIST ) )
 nodes_array=($nodes)
 head_node=${nodes_array[0]}
